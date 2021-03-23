@@ -7,3 +7,7 @@
 h1 {
     margin-bottom: 0;
 }
+
+.navbar-toggler {
+    border: 0;
+}
