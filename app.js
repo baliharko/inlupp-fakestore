@@ -82,14 +82,6 @@ $(document).ready(() => {
           const selected = allProducts.find(item => item.id == this.id);
           cart.push(selected);
           
-
-          /*
-          // amount of selected product in cart
-          let amount = cart.reduce((acc, val) => (
-            val.id === selected.id ? acc + 1 : acc 
-          ), 0);
-          */
-
           let amount = getProductAmount(selected);
           console.log(amount);
           console.log(cart);
