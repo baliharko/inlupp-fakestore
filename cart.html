@@ -17,7 +17,7 @@
       integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
       crossorigin="anonymous"
     ></script>
-    <title>The fakest Store!</title>
+    <title>Cart</title>
   </head>
   <body>
     <nav
@@ -63,11 +63,41 @@
         </ul>
       </div>
     </nav>
-    <div class="container-fluid" style="margin-top: 10vh">
-      <div
-        class="product-view container-fluid row d-flex justify-content-center"
-        id="productView"
-      ></div>
+    <div class="container d-flex justify-content-center mt-5">
+        <h1>Your order</h1>
+    </div>
+    <div class="container mt-5">
+      <table class="table table-striped">
+        <thead>
+          <tr class="table-light">
+            <th scope="col"></th>
+            <th scope="col">Product</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Price</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-1 p-1">
+              <img
+                src="https://picsum.photos/500?random=2"
+                class="img-fluid p-0 m-0"
+                alt="product image"
+                style="width: 4rem"
+              />
+            </td>
+            <td class="col-5">Product title</td>
+            <td class="col-3">Amount</td>
+            <td class="col-2">Price</td>
+            <td class="col-1">
+                <button class="close" type="button">
+                    <span>&times;</span>
+                </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="./app.js"></script>
