@@ -6,8 +6,10 @@ $(document).ready(() => {
     let allProducts = [];
 
     load();
-
+    
     let cart = (localStorage.getItem('cart') === null) ? [] : JSON.parse(localStorage.getItem('cart'));
+
+    populateCartTable();
     
     function load() {
         fetch(endPoint)
@@ -22,7 +24,7 @@ $(document).ready(() => {
     function render(data) {
 
         let output = "";
-        
+
         data.forEach((product) => {
             output += `
            <div class="card m-4 p-0" style="width: 22rem">
@@ -47,24 +49,50 @@ $(document).ready(() => {
 
         $('#productView').html(output);
 
-        $('.addToCartBtn').on('click', function() {                  
-          
+        $('.addToCartBtn').on('click', function() {                      
           const selected = allProducts.find(item => item.id == this.id);
           cart.push(selected);          
-          const amount = getProductAmount(selected);
-
+          
           localStorage.setItem('cart', JSON.stringify(cart));             
-          console.log(amount);
-          console.log(cart);
-      })
+          // console.log(amount);
+          // console.log(cart);    
+        });    
     }
 
-
-
+    // Returnerar antal dubletter av produkt i cart
     function getProductAmount(product) {
       return cart.reduce((acc, val) => (
         val.id === product.id ? acc + 1 : acc 
       ), 0); 
+    }
+
+    function populateCartTable() {
+
+        cart.forEach((product) => {
+            
+            $('#cartTable tr:last').after(
+                `
+                <tr>
+                    <td class="col-1 p-1">
+                        <img
+                        src="${product.image}"
+                        class="img-fluid p-0 m-0"
+                        alt="product image"
+                        style="width: 4rem"
+                        />
+                    </td>
+                    <td class="col-5">${product.title}</td>
+                    <td class="col-3">${getProductAmount(product)}</td>
+                    <td class="col-2">${product.price.toFixed(2)} kr</td>
+                    <td class="col-1">
+                        <button class="close" type="button">
+                            <span>&times;</span>
+                        </button>
+                    </td>
+                </tr>
+                `);
+            
+        });        
     }
 
     $('#clearLsBtn').on('click', () => {
