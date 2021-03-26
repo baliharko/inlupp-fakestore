@@ -68,31 +68,36 @@ $(document).ready(() => {
 
     function populateCartTable() {
 
-        cart.forEach((product) => {
-            
-            $('#cartTable tr:last').after(
+        let countedIds = [];
+        for(let i = 0; i < cart.length; i++) {
+
+            if(!countedIds.includes(cart[i].id)) {
+                $('#cartTable tr:last').after(
                 `
                 <tr>
                     <td class="col-1 p-1">
                         <img
-                        src="${product.image}"
+                        src="${cart[i].image}"
                         class="img-fluid p-0 m-0"
                         alt="product image"
                         style="width: 4rem"
                         />
                     </td>
-                    <td class="col-5">${product.title}</td>
-                    <td class="col-3">${getProductAmount(product)}</td>
-                    <td class="col-2">${product.price.toFixed(2)} kr</td>
+                    <td class="col-5">${cart[i].title}</td>
+                    <td class="col-3">${getProductAmount(cart[i])}</td>
+                    <td class="col-2">${cart[i].price.toFixed(2)} kr</td>
                     <td class="col-1">
                         <button class="close" type="button">
                             <span>&times;</span>
                         </button>
                     </td>
                 </tr>
-                `);
-            
-        });        
+                `                
+                );
+                console.log(countedIds);
+                countedIds.push(cart[i].id);
+            }
+        }
     }
 
     $('#clearLsBtn').on('click', () => {
