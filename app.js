@@ -2,28 +2,26 @@ $(document).ready(() => {
 
     const endPoint = 'https://webacademy.se/fakestore/';
     //const endPoint = 'https://fakestoreapi.com/products';
-
     const aboutModal = document.createElement('div');
+    const getCartItemsTotal = () => cart.reduce((acc, val) => (acc += val.price), 0);
+    const getCartVAT = () => getCartItemsTotal() * 0.2;
+    const getCartTotal = () => getCartItemsTotal() + getCartVAT();
     let allProducts = [];
-    load();
-    
 
+    load();
     let cart = (localStorage.getItem('cart') === null) ? [] : JSON.parse(localStorage.getItem('cart'));
-    
-    
+        
     function load() {
         fetch(endPoint)
         .then(response => response.json())
-        .then(json => {
-            allProducts = json;            
-            populateCartTable();
-            render(json)
-          })
-          .catch(err => console.error(err))
+        .then(json => render(json))
+        .catch(err => console.error(err));
     };
 
     function render(data) {
         let output = "";
+        allProducts = data;
+        populateCartTable();
 
         data.forEach((product) => {
             output += `
@@ -145,7 +143,7 @@ $(document).ready(() => {
         } else {
             $(this).closest('tr').find('.removeItemBtn').trigger('click');
         }
-        
+
         updateOrderTotal();
     }    
 
@@ -192,18 +190,6 @@ $(document).ready(() => {
         $('#itemTotal').html(`<p class="m-0">${getCartItemsTotal().toFixed(2)} kr</p>`);
         $('#vat').html(`<p class="m-0">${getCartVAT().toFixed(2)} kr</p>`);
         $('#total').html(`<p class="lead m-0">${getCartTotal().toFixed(2)} kr</p>`);
-    }
-
-    function getCartItemsTotal() {
-        return cart.reduce((acc, val) => (acc += val.price), 0);
-    }
-
-    function getCartVAT() {
-        return (getCartItemsTotal() * 0.2);
-    }
-
-    function getCartTotal() {
-        return getCartItemsTotal() + getCartVAT();
     }
 
     $('#modalButton').click(() => {
