@@ -4,27 +4,25 @@ $(document).ready(() => {
     //const endPoint = 'https://fakestoreapi.com/products';
 
     const aboutModal = document.createElement('div');
-
     let allProducts = [];
-
     load();
     
+
     let cart = (localStorage.getItem('cart') === null) ? [] : JSON.parse(localStorage.getItem('cart'));
     
-    populateCartTable();
     
     function load() {
         fetch(endPoint)
-          .then(response => response.json())
-          .then(json => {
+        .then(response => response.json())
+        .then(json => {
             allProducts = json;            
+            populateCartTable();
             render(json)
           })
           .catch(err => console.error(err))
     };
 
     function render(data) {
-
         let output = "";
 
         data.forEach((product) => {
@@ -41,7 +39,7 @@ $(document).ready(() => {
                    <p class="card-text small">${product.description}</p>
                 </div>
                 <div class="d-flex flex-column align-items-center">
-                   <p class="lead mt-5 mb-3">${product.price.toFixed(2)} kr</p>
+                   <p class="lead fade mt-5 mb-3">${product.price.toFixed(2)} kr</p>
                    <button style="width: 10rem;" class="btn btn-outline-secondary addToCartBtn" id="${product.id}">Add to Cart</button>
                 </div>
              </div>
@@ -52,27 +50,25 @@ $(document).ready(() => {
         $('#productView').html(output);
 
         $('.addToCartBtn').on('click', function() {                      
-          const selected = allProducts.find(item => item.id == this.id);
+          const selected = allProducts.find(item => item.id === Number(this.id));
           cart.push(selected);          
           
           localStorage.setItem('cart', JSON.stringify(cart));             
-          // console.log(amount);
-          // console.log(cart);    
+              
+          $(this).blur(); // Tar bort fokus på knappen när den blivit klickad på
         });    
     }
 
-    // Returnerar antal dubletter av produkt i cart
+    // Returnerar antal av vald produkt i cart
     function getProductAmount(product) {
-      return cart.reduce((acc, val) => (
-        val.id === product.id ? acc + 1 : acc 
-      ), 0); 
+        return cart.reduce((acc, val) => (val.id === Number(product.id) ? acc + 1 : acc), 0);     
     }
 
     function populateCartTable() {
         const countedIds = [];
-        
+
         for(let i = 0; i < cart.length; i++) {
-            if(!countedIds.includes(cart[i].id)) {
+            if(!countedIds.includes(Number(cart[i].id))) {
                 $('#cartTable tr:last').after(
                 `
                    <tr>
@@ -84,49 +80,78 @@ $(document).ready(() => {
                            alt="product image"
                            style="width: 4rem"
                            />
-                       </td>
-                       <td class="col-5">${cart[i].title}</td>
-                           <td class="col-3">
-                               ${getProductAmount(cart[i])}
-                           </td>
+                        </td>
+                        <td class="col-5">${cart[i].title}</td>
+                        <td class="col-3">
+                            <div class="d-flex justify-content-center">
+                                <button class="btn close mx-3 productPlus" type="button">
+                                    <span style="font-size: 22px;">&plus;</span>
+                                </button>
+                                <p class="p-0 m-0 amountCount">${getProductAmount(cart[i])}</p>
+                                <button class="btn close mx-3 productMinus" type="button">
+                                    <span style="font-size: 22px;">&minus;</span>
+                                </button>
+                            </div>
+                        </td>
                        <td class="col-2">${cart[i].price.toFixed(2)} kr/st</td>
                        <td class="col-1">
                            <button class="close removeItemBtn" type="button">
-                               <span>&times;</span>
+                               &times;
                            </button>
                        </td>
                    </tr>
                 `);
-
-                countedIds.push(cart[i].id);
+                countedIds.push(Number(cart[i].id));
             }
         }
 
 		$('.prodId').hide();
-
         $('.removeItemBtn').on('click', removeProduct);
+        $('.productPlus').on('click', increaseProductAmount);
+        $('.productMinus').on('click', decreaseProductAmount);
 
         updateOrderTotal();
     }
 
     function removeProduct() {
-            const productId = $(this).closest('tr').find('.prodId').text();
+        const productId = $(this).closest('tr').find('.prodId').text();
+        cart = cart.filter(item => item.id !== Number(productId));
 
-			cart = cart.filter(function(item) {
-				return item.id !== Number(productId);
-			});            
-
-			localStorage.setItem('cart', JSON.stringify(cart));
-            $(this).closest('tr').remove();
-            updateOrderTotal();
+	    localStorage.setItem('cart', JSON.stringify(cart));
+        $(this).closest('tr').remove();
+        updateOrderTotal();            
     };
 
-    $('#clearLsBtn').on('click', () => {
-        clearLocalstorage();        
-    })
+    function increaseProductAmount() {
+        const productId = $(this).closest('tr').find('.prodId').text();                
+        cart.push(cart.find(item => item.id === Number(productId)));
+        localStorage.setItem('cart', JSON.stringify(cart));        
+
+        const productIndex = cart.indexOf(cart.find(val => val.id === Number(productId)));        
+        $(this).closest('tr').find('.amountCount').html(`<p class="p-0 m-0 amountCount">${getProductAmount(cart[productIndex])}</p>`);
+        updateOrderTotal();
+    }
+
+    function decreaseProductAmount() {
+
+        let productAmount;
+        const productId = $(this).closest('tr').find('.prodId').text();        
+
+        if((productAmount = cart.reduce((acc, val) => (val.id === Number(productId) ? acc + 1 : acc), 0)) > 1) {
+            const productIndex = cart.indexOf(cart.find(item => item.id === Number(productId)));
+            cart.splice(productIndex, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));            
+            $(this).closest('tr').find('.amountCount').html(`<p class="p-0 m-0 amountCount">${productAmount - 1}</p>`);
+        } else {
+            $(this).closest('tr').find('.removeItemBtn').trigger('click');
+        }
+        
+        updateOrderTotal();
+    }    
+
+    $('#clearLsBtn').on('click', clearLocalstorage);
     
     // $('#clearLsBtn').hide();
-
     // Debug - rensar localstorage och laddar om sidan
     function clearLocalstorage() {
         localStorage.clear();        
@@ -169,15 +194,6 @@ $(document).ready(() => {
         $('#total').html(`<p class="lead m-0">${getCartTotal().toFixed(2)} kr</p>`);
     }
 
-    /**
-     * När amount är 0 ska raden raderas.
-     * ingen forms för att ange antal
-     * + och - knappar     
-     */
-    
-
-
-
     function getCartItemsTotal() {
         return cart.reduce((acc, val) => (acc += val.price), 0);
     }
@@ -190,8 +206,6 @@ $(document).ready(() => {
         return getCartItemsTotal() + getCartVAT();
     }
 
-    
-
     $('#modalButton').click(() => {
         $('#myModal').modal('show');
     });
@@ -200,4 +214,3 @@ $(document).ready(() => {
         $('#myModal').modal('hide');
     });
 });
-
