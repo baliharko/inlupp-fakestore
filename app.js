@@ -1,6 +1,8 @@
 $(document).ready(() => {
 
     const endPoint = 'https://webacademy.se/fakestore/';
+    //const endPoint = 'https://fakestoreapi.com/products';
+
     const aboutModal = document.createElement('div');
 
     let allProducts = [];
@@ -8,7 +10,7 @@ $(document).ready(() => {
     load();
     
     let cart = (localStorage.getItem('cart') === null) ? [] : JSON.parse(localStorage.getItem('cart'));
-
+    
     populateCartTable();
     
     function load() {
@@ -67,79 +69,128 @@ $(document).ready(() => {
     }
 
     function populateCartTable() {
-
-        let countedIds = [];
+        const countedIds = [];
+        
         for(let i = 0; i < cart.length; i++) {
-
             if(!countedIds.includes(cart[i].id)) {
                 $('#cartTable tr:last').after(
                 `
-                <tr>
-                    <td class="col-1 p-1">
-                        <img
-                        src="${cart[i].image}"
-                        class="img-fluid p-0 m-0"
-                        alt="product image"
-                        style="width: 4rem"
-                        />
-                    </td>
-                    <td class="col-5">${cart[i].title}</td>
-                    <td class="col-3">${getProductAmount(cart[i])}</td>
-                    <td class="col-2">${cart[i].price.toFixed(2)} kr</td>
-                    <td class="col-1">
-                        <button class="close" type="button">
-                            <span>&times;</span>
-                        </button>
-                    </td>
-                </tr>
-                `                
-                );
-                console.log(countedIds);
+                   <tr>
+						<td class="prodId">${cart[i].id}</td>
+                    	<td class="col-1 p-1">
+                           <img
+                           src="${cart[i].image}"
+                           class="img-fluid p-0 m-0"
+                           alt="product image"
+                           style="width: 4rem"
+                           />
+                       </td>
+                       <td class="col-5">${cart[i].title}</td>
+                           <td class="col-3">
+                               ${getProductAmount(cart[i])}
+                           </td>
+                       <td class="col-2">${cart[i].price.toFixed(2)} kr/st</td>
+                       <td class="col-1">
+                           <button class="close removeItemBtn" type="button">
+                               <span>&times;</span>
+                           </button>
+                       </td>
+                   </tr>
+                `);
+
                 countedIds.push(cart[i].id);
             }
         }
+
+		$('.prodId').hide();
+
+        $('.removeItemBtn').on('click', removeProduct);
+
+        updateOrderTotal();
     }
+
+    function removeProduct() {
+            const productId = $(this).closest('tr').find('.prodId').text();
+
+			cart = cart.filter(function(item) {
+				return item.id !== Number(productId);
+			});            
+
+			localStorage.setItem('cart', JSON.stringify(cart));
+            $(this).closest('tr').remove();
+            updateOrderTotal();
+    };
 
     $('#clearLsBtn').on('click', () => {
         clearLocalstorage();        
     })
+    
+    // $('#clearLsBtn').hide();
 
     // Debug - rensar localstorage och laddar om sidan
     function clearLocalstorage() {
-        localStorage.clear();
-        window.location.reload(true);
+        localStorage.clear();        
+        window.location.reload(true); // Vill ladda om ordentligt
         console.log('cleared localstorage & reloaded page');
     }
 
-        aboutModal.innerHTML = 
-    `
-    <div id="myModal" class="modal fade" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content text-center">
-          <div class="modal-header align-self-center">
-            <h5 class="modal-title m-2">About</h5>
-          </div>
-          <div class="modal-body">
-            <p class="lead">You won't find a store more fake than this...</p>
-            <p class="mx-5 mt-2 mb-4">
-              A fake store fetching data from an API and implementing basic
-              ecommerce functionality.
-            </p>
-            <button class="btn btn-outline-secondary" id="exitModal">
-              Cool!
-            </button>
-          </div>
-          <div class="modal-footer d-flex justify-content-start">
-            <p class="small my-0" style="font-size: xx-small">
-              baliharko - 2021
-            </p>
-          </div>
-        </div>
-      </div>
-    </div
+    aboutModal.innerHTML = `
+          <div id="myModal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content text-center">
+                <div class="modal-header align-self-center">
+                  <h5 class="modal-title m-2">About</h5>
+                </div>
+                <div class="modal-body">
+                  <p class="lead">You won't find a store more fake than this...</p>
+                  <p class="mx-5 mt-2 mb-4">
+                    A fake store fetching data from an API and implementing basic
+                    ecommerce functionality.
+                  </p>
+                  <button class="btn btn-outline-secondary" id="exitModal">
+                    Cool!
+                  </button>
+                </div>
+                <div class="modal-footer d-flex justify-content-start">
+                  <p class="small my-0" style="font-size: xx-small">
+                    baliharko - 2021
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div
     `;
 
     document.body.insertAdjacentElement('beforeend', aboutModal);
+
+    function updateOrderTotal() {
+        $('#itemTotal').html(`<p class="m-0">${getCartItemsTotal().toFixed(2)} kr</p>`);
+        $('#vat').html(`<p class="m-0">${getCartVAT().toFixed(2)} kr</p>`);
+        $('#total').html(`<p class="lead m-0">${getCartTotal().toFixed(2)} kr</p>`);
+    }
+
+    /**
+     * När amount är 0 ska raden raderas.
+     * ingen forms för att ange antal
+     * + och - knappar     
+     */
+    
+
+
+
+    function getCartItemsTotal() {
+        return cart.reduce((acc, val) => (acc += val.price), 0);
+    }
+
+    function getCartVAT() {
+        return (getCartItemsTotal() * 0.2);
+    }
+
+    function getCartTotal() {
+        return getCartItemsTotal() + getCartVAT();
+    }
+
+    
 
     $('#modalButton').click(() => {
         $('#myModal').modal('show');
