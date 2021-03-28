@@ -51,9 +51,9 @@
             <a
               href="#"
               data-toggle="modal"
-              data-target="#myModal"
+              data-target="#aboutModal"
               class="text-light nav-link"
-              id="modalButton"
+              id="aboutModalBtn"
               >About</a
             >
           </li>
@@ -63,47 +63,126 @@
         </ul>
       </div>
     </nav>
-    <div class="container d-flex justify-content-center mt-5">
-      <h1>Your order</h1>
+    <div class="container text-center" id="emptyCart" style="margin-top: 10rem;">
+      <h1>Your cart is empty...</h1>
     </div>
-    <div class="container mt-5">
-      <table class="table table-striped" id="cartTable">
-        <thead>
-          <tr class="table-light">
-            <th scope="col"></th>
-            <th scope="col">Product</th>
-            <th scope="col" class="text-center">Amount</th>
-            <th scope="col">Price</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody id="cartBody"></tbody>
-      </table>
-      <div class="d-flex justify-content-end" id="orderTotal">
-        <table class="table col-4 table-borderless mt-4">
+    <div id="activeCart">
+      <div
+        class="container d-flex justify-content-center mt-5"
+        id="cartTitleActive"
+      >
+        <h1>Your order</h1>
+      </div>
+      <div class="container mt-5 active-order">
+        <table class="table table-striped" id="cartTable">
           <thead>
-            <tr class="table-light p-1">
-              <th class="p-1">
-                <p class="m-0">Item(s) Total:</p>
-              </th>
-              <td class="p-1 text-end" id="itemTotal"></td>
-            </tr>
             <tr class="table-light">
-              <th class="p-1">
-                <p class="m-0">VAT:</p>
-              </th>
-              <td class="p-1 text-end" id="vat"></td>
-            </tr>
-            <tr class="table-light">
-              <th class="p-1">
-                <p class="lead m-0">Total:</p>
-              </th>
-              <td class="p-1 text-end" id="total"></td>
+              <th scope="col"></th>
+              <th scope="col">Product</th>
+              <th scope="col" class="text-center">Amount</th>
+              <th scope="col">Price</th>
+              <th scope="col"></th>
             </tr>
           </thead>
+          <tbody id="cartBody"></tbody>
         </table>
+        <div class="d-flex justify-content-end" id="orderTotal">
+          <table class="table col-4 table-borderless mt-4">
+            <tbody>
+              <tr class="p-1">
+                <th class="p-1">
+                  <p class="m-0">Item(s) Total:</p>
+                </th>
+                <td class="p-1 text-end" id="itemTotal"></td>
+              </tr>
+              <tr>
+                <th class="p-1">
+                  <p class="m-0">VAT:</p>
+                </th>
+                <td class="p-1 text-end" id="vat"></td>
+              </tr>
+              <tr>
+                <th class="p-1">
+                  <p class="lead m-0">Total:</p>
+                </th>
+                <td class="p-1 text-end" id="total"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn btn-outline-secondary col-4"
+            type="button"
+            id="openOrderFormsBtn"
+          >
+            Order
+          </button>
+        </div>
       </div>
     </div>
+
+    <div
+      id="orderFormsModal"
+      class="modal fade"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content text-center">
+          <div class="modal-header align-self-center">
+            <h5 class="modal-title m-2">Order Form</h5>
+          </div>
+          <div class="modal-body" id="orderFormsModalBody">
+            <form>
+              <div class="form-group mt-3 mb-4">
+                <input
+                  type="text"
+                  class="form-control my-3 col-8 mx-auto"
+                  id="nameInputField"
+                  aria-describedby="fullName"
+                  placeholder="Full name"
+                />
+                <input
+                  type="text"
+                  class="form-control my-3 col-8 mx-auto"
+                  id="phoneInputField"
+                  aria-describedby="phone"
+                  placeholder="Phone"
+                />
+                <input
+                  type="email"
+                  class="form-control my-3 col-8 mx-auto"
+                  id="emailInputField"
+                  aria-describedby="email"
+                  placeholder="your@email.com"
+                />
+                <input
+                  type="text"
+                  class="form-control my-3 col-8 mx-auto"
+                  id="addressInputField"
+                  aria-describedby="adress"
+                  placeholder="Address"
+                />
+              </div>
+            </form>
+            <button class="btn btn-outline-secondary" id="placeOrderBtn">
+              Place order!
+            </button>
+          </div>
+          <div class="modal-body" id="thankYouModalBody">
+            <h1 class="m-5">Thank you for your order!</h1>
+            i
+          </div>
+          <div class="modal-footer d-flex justify-content-start">
+            <p class="small my-0" style="font-size: xx-small">
+              baliharko - 2021
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="./app.js"></script>
   </body>

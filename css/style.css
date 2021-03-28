@@ -12,8 +12,8 @@ h1 {
     border: 0;
 }
 
-#myModal {
-  top: 30%;
+#aboutModal, #orderFormsModal{
+  top: 25%;
 }
 
 .btn:focus {

@@ -1,15 +1,28 @@
 $(document).ready(() => {
 
-    const endPoint = 'https://webacademy.se/fakestore/';
-    //const endPoint = 'https://fakestoreapi.com/products';
+    //const endPoint = 'https://webacademy.se/fakestore/';
+    const endPoint = 'https://fakestoreapi.com/products';
     const aboutModal = document.createElement('div');
     const getCartItemsTotal = () => cart.reduce((acc, val) => (acc += val.price), 0);
-    const getCartVAT = () => getCartItemsTotal() * 0.2;
+    const getCartVAT = () => getCartItemsTotal() * 0.25;
     const getCartTotal = () => getCartItemsTotal() + getCartVAT();
     let allProducts = [];
 
     load();
+
     let cart = (localStorage.getItem('cart') === null) ? [] : JSON.parse(localStorage.getItem('cart'));
+
+    setCartPage();
+    
+    function setCartPage() {
+       if(cart && cart.length >= 1) {
+           $('#emptyCart').hide(); 
+           $('#activeCart').show();
+       } else {
+           $('#activeCart').hide();
+           $('#emptyCart').show();
+       };
+    }
         
     function load() {
         fetch(endPoint)
@@ -21,7 +34,8 @@ $(document).ready(() => {
     function render(data) {
         let output = "";
         allProducts = data;
-        populateCartTable();
+
+        populateCartTable();        
 
         data.forEach((product) => {
             output += `
@@ -41,8 +55,7 @@ $(document).ready(() => {
                    <button style="width: 10rem;" class="btn btn-outline-secondary addToCartBtn" id="${product.id}">Add to Cart</button>
                 </div>
              </div>
-           </div>`;                
-          
+           </div>`;                          
         });
 
         $('#productView').html(output);
@@ -50,11 +63,10 @@ $(document).ready(() => {
         $('.addToCartBtn').on('click', function() {                      
           const selected = allProducts.find(item => item.id === Number(this.id));
           cart.push(selected);          
-          
-          localStorage.setItem('cart', JSON.stringify(cart));             
-              
+
+          localStorage.setItem('cart', JSON.stringify(cart));                   
           $(this).blur(); // Tar bort fokus på knappen när den blivit klickad på
-        });    
+        });  
     }
 
     // Returnerar antal av vald produkt i cart
@@ -68,8 +80,7 @@ $(document).ready(() => {
         for(let i = 0; i < cart.length; i++) {
             if(!countedIds.includes(Number(cart[i].id))) {
                 $('#cartTable tr:last').after(
-                `
-                   <tr>
+                    `<tr>
 						<td class="prodId">${cart[i].id}</td>
                     	<td class="col-1 p-1">
                            <img
@@ -91,13 +102,13 @@ $(document).ready(() => {
                                 </button>
                             </div>
                         </td>
-                       <td class="col-2">${cart[i].price.toFixed(2)} kr/st</td>
-                       <td class="col-1">
-                           <button class="close removeItemBtn" type="button">
+                        <td class="col-2">${cart[i].price.toFixed(2)} kr/st</td>
+                        <td class="col-1">
+                            <button class="close removeItemBtn" type="button">
                                &times;
-                           </button>
-                       </td>
-                   </tr>
+                            </button>
+                        </td>
+                    </tr>
                 `);
                 countedIds.push(Number(cart[i].id));
             }
@@ -117,7 +128,9 @@ $(document).ready(() => {
 
 	    localStorage.setItem('cart', JSON.stringify(cart));
         $(this).closest('tr').remove();
-        updateOrderTotal();            
+
+        updateOrderTotal();
+        setCartPage();
     };
 
     function increaseProductAmount() {
@@ -131,7 +144,6 @@ $(document).ready(() => {
     }
 
     function decreaseProductAmount() {
-
         let productAmount;
         const productId = $(this).closest('tr').find('.prodId').text();        
 
@@ -141,14 +153,20 @@ $(document).ready(() => {
             localStorage.setItem('cart', JSON.stringify(cart));            
             $(this).closest('tr').find('.amountCount').html(`<p class="p-0 m-0 amountCount">${productAmount - 1}</p>`);
         } else {
-            $(this).closest('tr').find('.removeItemBtn').trigger('click');
+            $(this).closest('tr').find('.removeItemBtn').trigger('click'); // Simulerar klick på x-knappen
         }
 
         updateOrderTotal();
+        setCartPage();
     }    
 
-    $('#clearLsBtn').on('click', clearLocalstorage);
-    
+    function updateOrderTotal() {
+        $('#itemTotal').html(`<p class="m-0">${getCartItemsTotal().toFixed(2)} kr</p>`);
+        $('#vat').html(`<p class="m-0">${getCartVAT().toFixed(2)} kr</p>`);
+        $('#total').html(`<p class="lead m-0">${getCartTotal().toFixed(2)} kr</p>`);
+    }
+
+    $('#clearLsBtn').on('click', clearLocalstorage);    
     // $('#clearLsBtn').hide();
     // Debug - rensar localstorage och laddar om sidan
     function clearLocalstorage() {
@@ -158,7 +176,7 @@ $(document).ready(() => {
     }
 
     aboutModal.innerHTML = `
-          <div id="myModal" class="modal fade" tabindex="-1" aria-hidden="true">
+          <div id="aboutModal" class="modal fade" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content text-center">
                 <div class="modal-header align-self-center">
@@ -170,7 +188,7 @@ $(document).ready(() => {
                     A fake store fetching data from an API and implementing basic
                     ecommerce functionality.
                   </p>
-                  <button class="btn btn-outline-secondary" id="exitModal">
+                  <button class="btn btn-outline-secondary" id="exitAboutModal">
                     Cool!
                   </button>
                 </div>
@@ -181,22 +199,64 @@ $(document).ready(() => {
                 </div>
               </div>
             </div>
-          </div
+          </div>
     `;
 
     document.body.insertAdjacentElement('beforeend', aboutModal);
 
-    function updateOrderTotal() {
-        $('#itemTotal').html(`<p class="m-0">${getCartItemsTotal().toFixed(2)} kr</p>`);
-        $('#vat').html(`<p class="m-0">${getCartVAT().toFixed(2)} kr</p>`);
-        $('#total').html(`<p class="lead m-0">${getCartTotal().toFixed(2)} kr</p>`);
-    }
+    $('#aboutModalBtn').click(() => $('#aboutModal').modal('show'));
+    $('#exitAboutModal').click(() => $('#aboutModal').modal('hide'));
 
-    $('#modalButton').click(() => {
-        $('#myModal').modal('show');
-    });
+    $('#openOrderFormsBtn').click(() => $('#orderFormsModal').modal('show'));
+    $('#placeOrderBtn').click(validateOrderForms);
 
-    $('#exitModal').click(() => {
-        $('#myModal').modal('hide');
-    });
+    function validateOrderForms() {
+
+        $('#nameInputField').removeClass('is-invalid'); 
+        $('#addressInputField').removeClass('is-invalid');
+        $('#emailInputField').removeClass('is-invalid');
+        $('#phoneInputField').removeClass('is-invalid');
+
+        const name = $('#nameInputField').val();
+        const address = $('#addressInputField').val();        
+        const phone = $('#phoneInputField').val().match(/^[\d\s\(\)\-+]+$/);
+        const email = $('#emailInputField').val().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        
+        if (!(name && name.trim())) {
+            $('#nameInputField').val('');
+            $('#nameInputField').addClass('is-invalid');
+        }
+
+        if(!phone) {
+            $('#phoneInputField').val('');
+            $('#phoneInputField').addClass('is-invalid');
+        }
+
+        if(!(address && address.trim())) {
+            $('#addressInputField').val('');
+            $('#addressInputField').addClass('is-invalid');
+        }
+
+        if(!email) {
+            $('#emailInputField').val('');
+            $('#emailInputField').addClass('is-invalid');
+        }
+
+        if(name && name.trim() && phone && address && address.trim() && email) {
+                        
+            $('#orderFormsModal').modal('hide');
+            $('#orderFormsModalBody').hide();
+            
+            $('#orderFormsModal').one('hidden.bs.modal', () => {
+                localStorage.clear();                                 
+                $('#thankYouModalBody').show();
+                $('#orderFormsModal').modal('show');
+
+                $('#activeCart').hide();
+                $('#emptyCart').show();                
+            }); 
+        }
+    };
+
+    $('#thankYouModalBody').hide();    
 });
