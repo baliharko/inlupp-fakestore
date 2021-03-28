@@ -1,7 +1,7 @@
 $(document).ready(() => {
 
-    //const endPoint = 'https://webacademy.se/fakestore/';
-    const endPoint = 'https://fakestoreapi.com/products';
+    const endPoint = 'https://webacademy.se/fakestore/';
+    // const endPoint = 'https://fakestoreapi.com/products';
     const aboutModal = document.createElement('div');
     const getCartItemsTotal = () => cart.reduce((acc, val) => (acc += val.price), 0);
     const getCartVAT = () => getCartItemsTotal() * 0.25;
@@ -243,19 +243,25 @@ $(document).ready(() => {
         }
 
         if(name && name.trim() && phone && address && address.trim() && email) {
-                        
-            $('#orderFormsModal').modal('hide');
-            $('#orderFormsModalBody').hide();
-            
-            $('#orderFormsModal').one('hidden.bs.modal', () => {
-                localStorage.clear();                                 
-                $('#thankYouModalBody').show();
-                $('#orderFormsModal').modal('show');
-
-                $('#activeCart').hide();
-                $('#emptyCart').show();                
-            }); 
+            finishOrder();                        
         }
+    };
+
+    function finishOrder() {
+
+        // ----> SKICKA VIDARE TILL KLARNA HÄR <-----
+
+        $('#orderFormsModal').modal('hide');
+        $('#orderFormsModalBody').hide();
+            
+        $('#orderFormsModal').one('hidden.bs.modal', () => {
+            localStorage.clear();                                 
+            $('#thankYouModalBody').show();
+            $('#orderFormsModal').modal('show');
+
+            $('#activeCart').hide();
+            $('#emptyCart').show();                
+        }); 
     };
 
     $('#thankYouModalBody').hide();    
