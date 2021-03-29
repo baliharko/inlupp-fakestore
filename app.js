@@ -168,8 +168,8 @@ $(document).ready(() => {
         $('#total').html(`<p class="lead m-0">${getCartTotal().toFixed(2)} kr</p>`);
     }
 
-    // $('#clearLsBtn').on('click', clearLocalstorage);
-    // $('#clearLsBtn').hide();
+    $('#clearLsBtn').on('click', clearLocalstorage);
+    $('#clearLsBtn').hide();
     // Debug - rensar localstorage och laddar om sidan
     function clearLocalstorage() {
         localStorage.clear();        
