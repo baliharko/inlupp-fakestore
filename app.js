@@ -15,6 +15,10 @@ $(document).ready(() => {
     console.log(cart);
 
     setCartPage();
+
+    // debug
+    $('#clearLsBtn').on('click', clearLocalstorage);
+    $('#clearLsBtn').hide();
     
     function setCartPage() {
        if(cart && cart.length >= 1) {
@@ -168,8 +172,6 @@ $(document).ready(() => {
         $('#total').html(`<p class="lead m-0">${getCartTotal().toFixed(2)} kr</p>`);
     }
 
-    $('#clearLsBtn').on('click', clearLocalstorage);
-    $('#clearLsBtn').hide();
     // Debug - rensar localstorage och laddar om sidan
     function clearLocalstorage() {
         localStorage.clear();        
@@ -254,13 +256,12 @@ $(document).ready(() => {
         // ----> SKICKA VIDARE TILL KLARNA HÄR <-----
 
         $('#orderFormsModal').modal('hide');
-        $('#orderFormsModalBody').hide();
-            
+        $('#orderFormsModalBody').hide();            
         $('#orderFormsModal').one('hidden.bs.modal', () => {
+            
             localStorage.clear();                                 
             $('#thankYouModalBody').show();
             $('#orderFormsModal').modal('show');
-
             $('#activeCart').hide();
             $('#emptyCart').show();            
         }); 
