@@ -12,9 +12,11 @@ h1 {
     border: 0;
 }
 
+/*
 #aboutModal, #orderFormsModal{
   top: 15%;
 }
+*/
 
 .btn:focus {
   outline: none;
