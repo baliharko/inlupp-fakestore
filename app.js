@@ -12,6 +12,8 @@ $(document).ready(() => {
 
     let cart = (localStorage.getItem('cart') === null) ? [] : JSON.parse(localStorage.getItem('cart'));
 
+    console.log(cart);
+
     setCartPage();
     
     function setCartPage() {
@@ -260,9 +262,9 @@ $(document).ready(() => {
             $('#orderFormsModal').modal('show');
 
             $('#activeCart').hide();
-            $('#emptyCart').show();                
+            $('#emptyCart').show();            
         }); 
-    };
+    }
 
     $('#thankYouModalBody').hide();    
 });
