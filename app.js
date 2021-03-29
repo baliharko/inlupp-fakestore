@@ -5,7 +5,9 @@ $(document).ready(() => {
     const aboutModal = document.createElement('div');
     const getCartItemsTotal = () => cart.reduce((acc, val) => (acc += val.price), 0);
     const getCartVAT = () => getCartItemsTotal() * 0.25;
-    const getCartTotal = () => getCartItemsTotal() + getCartVAT();
+    const getCartTotal = () => getCartItemsTotal() + getCartVAT();    
+    const updateNavCartAmount = () => $('.navCartAmount').html(`(${cart.length})`); 
+
     let allProducts = [];
 
     load();
@@ -70,9 +72,12 @@ $(document).ready(() => {
           const selected = allProducts.find(item => item.id === Number(this.id));
           cart.push(selected);          
 
+          updateNavCartAmount();
           localStorage.setItem('cart', JSON.stringify(cart));                   
           $(this).blur(); // Tar bort fokus på knappen när den blivit klickad på
         });  
+
+        updateNavCartAmount();
     }
 
     // Returnerar antal av vald produkt i cart
@@ -135,6 +140,7 @@ $(document).ready(() => {
 	    localStorage.setItem('cart', JSON.stringify(cart));
         $(this).closest('tr').remove();
 
+        updateNavCartAmount();
         updateOrderTotal();
         setCartPage();
     };
@@ -146,6 +152,7 @@ $(document).ready(() => {
 
         const productIndex = cart.indexOf(cart.find(val => val.id === Number(productId)));        
         $(this).closest('tr').find('.amountCount').html(`<p class="p-0 m-0 amountCount">${getProductAmount(cart[productIndex])}</p>`);
+        updateNavCartAmount();
         updateOrderTotal();
     }
 
@@ -162,6 +169,7 @@ $(document).ready(() => {
             $(this).closest('tr').find('.removeItemBtn').trigger('click'); // Simulerar klick på x-knappen
         }
 
+        updateNavCartAmount();
         updateOrderTotal();
         setCartPage();
     }    
@@ -257,14 +265,17 @@ $(document).ready(() => {
 
         $('#orderFormsModal').modal('hide');
         $('#orderFormsModalBody').hide();            
+        
         $('#orderFormsModal').one('hidden.bs.modal', () => {
             
-            localStorage.clear();                                 
+            localStorage.clear();      
+            cart = [];
             $('#thankYouModalBody').show();
             $('#orderFormsModal').modal('show');
             $('#activeCart').hide();
             $('#emptyCart').show();            
-        }); 
+            updateNavCartAmount();
+        });         
     }
 
     $('#thankYouModalBody').hide();    
