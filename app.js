@@ -95,7 +95,7 @@ $(document).ready(() => {
                 $('#cartTable tr:last').after(
                     `<tr>
 						<td class="prodId">${cart[i].id}</td>
-                    	<td class="col-1 p-1">
+                    	<td class="col-1 p-1 d-none d-md-table-cell">
                            <img
                            src="${cart[i].image}"
                            class="img-fluid p-0 m-0"
@@ -116,7 +116,7 @@ $(document).ready(() => {
                             </div>
                         </td>
                         <td class="col-2">${cart[i].price.toFixed(2)} kr/st</td>
-                        <td class="col-1">
+                        <td class="d-none d-md-table-cell col-1">
                             <button class="close removeItemBtn" type="button">
                                &times;
                             </button>

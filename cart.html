@@ -65,61 +65,67 @@
         </ul>
       </div>
     </nav>
-    <div class="container text-center" id="emptyCart" style="margin-top: 10rem">
-      <h1>Your cart is empty...</h1>
-    </div>
-    <div id="activeCart">
+    <div class="container-fluid">
       <div
-        class="container d-flex justify-content-center mt-5"
-        id="cartTitleActive"
+        class="container text-center"
+        id="emptyCart"
+        style="margin-top: 10rem"
       >
-        <h1>Your order</h1>
+        <h1>Your cart is empty...</h1>
       </div>
-      <div class="container mt-5 active-order">
-        <table class="table table-striped" id="cartTable">
-          <thead>
-            <tr class="table-light">
-              <th scope="col"></th>
-              <th scope="col">Product</th>
-              <th scope="col" class="text-center">Amount</th>
-              <th scope="col">Price</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody id="cartBody"></tbody>
-        </table>
-        <div class="d-flex justify-content-end" id="orderTotal">
-          <table class="table col-4 table-borderless mt-4">
-            <tbody>
-              <tr class="p-1">
-                <th class="p-1">
-                  <p class="m-0">Item(s) Total:</p>
-                </th>
-                <td class="p-1 text-end" id="itemTotal"></td>
-              </tr>
-              <tr>
-                <th class="p-1">
-                  <p class="m-0">VAT:</p>
-                </th>
-                <td class="p-1 text-end" id="vat"></td>
-              </tr>
-              <tr>
-                <th class="p-1">
-                  <p class="lead m-0">Total:</p>
-                </th>
-                <td class="p-1 text-end" id="total"></td>
-              </tr>
-            </tbody>
-          </table>
+      <div id="activeCart">
+        <div
+          class="container d-flex justify-content-center mt-5"
+          id="cartTitleActive"
+        >
+          <h1>Your order</h1>
         </div>
-        <div class="d-flex justify-content-end">
-          <button
-            class="btn btn-outline-secondary col-4"
-            type="button"
-            id="openOrderFormsBtn"
-          >
-            Order
-          </button>
+        <div class="container mt-5 active-order">
+          <table class="table table-striped" id="cartTable">
+            <thead>
+              <tr class="table-light">
+                <th scope="col" class="d-none d-md-table-cell"></th>
+                <th scope="col">Product</th>
+                <th scope="col" class="text-center">Amount</th>
+                <th scope="col">Price</th>
+                <th scope="col" class="d-none d-md-table-cell"></th>
+              </tr>
+            </thead>
+            <tbody id="cartBody"></tbody>
+          </table>
+          <div class="d-flex justify-content-end" id="orderTotal">
+            <table class="table col-4 table-borderless mt-4">
+              <tbody>
+                <tr class="p-1">
+                  <th class="p-1">
+                    <p class="m-0">Item(s) Total:</p>
+                  </th>
+                  <td class="p-1 text-end" id="itemTotal"></td>
+                </tr>
+                <tr>
+                  <th class="p-1">
+                    <p class="m-0">VAT:</p>
+                  </th>
+                  <td class="p-1 text-end" id="vat"></td>
+                </tr>
+                <tr>
+                  <th class="p-1">
+                    <p class="lead m-0">Total:</p>
+                  </th>
+                  <td class="p-1 text-end" id="total"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button
+              class="btn btn-outline-secondary col-4"
+              type="button"
+              id="openOrderFormsBtn"
+            >
+              Order
+            </button>
+          </div>
         </div>
       </div>
     </div>
