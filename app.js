@@ -121,10 +121,20 @@ $(document).ready(() => {
                         </td>
                     </tr>
                 `);
+
+                $('#orderFormsModalBody tbody').append(
+                    `<tr class="table-light d-flex justify-content">						
+                        <td class="py-1 text-start small col-6">${cart[i].title}</td>
+                        <td class="py-1 small col-2">                            
+                            <p class="p-0 m-0 amountCount">${getProductAmount(cart[i])}x</p>                        
+                        </td>
+                        <td class="py-1 small col-4">${cart[i].price.toFixed(2)} kr/st</td>
+                    </tr>
+                `);
                 countedIds.push(Number(cart[i].id));
             }
         }
-
+    
 		$('.prodId').hide();
         $('.removeItemBtn').on('click', removeProduct);
         $('.productPlus').on('click', increaseProductAmount);
@@ -267,6 +277,7 @@ $(document).ready(() => {
             finishOrder();                        
         }
     };
+
 
     function finishOrder() {
 
