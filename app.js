@@ -251,6 +251,8 @@ $(document).ready(() => {
     $('#openOrderFormsBtn').click(() => $('#orderFormsModal').modal('show'));
     $('#placeOrderBtn').click(validateOrderForms);
 
+    $('#mobileExitModalBtn').on('click', () => $('#orderFormsModal').modal('hide'));
+
     function validateOrderForms() {
 
         $('#nameInputField').removeClass('is-invalid'); 
