@@ -127,8 +127,6 @@ $(document).ready(() => {
                 countedIds.push(Number(cart[i].id));
             }
         }
-
-
     
 		$('.prodId').hide();
         $('.removeItemBtn').on('click', removeProduct);
