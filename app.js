@@ -103,19 +103,19 @@ $(document).ready(() => {
                            style="width: 4rem"
                            />
                         </td>
-                        <td class="col-5">${cart[i].title}</td>
-                        <td class="col-3">
+                        <td class="pr-0 pr-md-4 col-md-5">${cart[i].title}</td>
+                        <td class="col-md-3">
                             <div class="d-flex justify-content-center">
-                                <button class="btn close mx-3 productPlus" type="button">
+                                <button class="btn close ml-0 mr-2 mx-md-3 productPlus" type="button">
                                     <span style="font-size: 22px;">&plus;</span>
                                 </button>
                                 <p class="p-0 m-0 amountCount">${getProductAmount(cart[i])}</p>
-                                <button class="btn close mx-3 productMinus" type="button">
+                                <button class="btn close mr-0 ml-2 mx-md-3 productMinus" type="button">
                                     <span style="font-size: 22px;">&minus;</span>
                                 </button>
                             </div>
                         </td>
-                        <td class="col-2">${cart[i].price.toFixed(2)} kr/st</td>
+                        <td class="col-md-2">${cart[i].price.toFixed(2)} kr/st</td>
                         <td class="d-none d-md-table-cell col-1">
                             <button class="close removeItemBtn" type="button">
                                &times;
