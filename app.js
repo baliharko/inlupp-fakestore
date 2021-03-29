@@ -66,6 +66,8 @@ $(document).ready(() => {
            </div>`;                          
         });
 
+        updateOrderModal();
+
         $('#productView').html(output);
 
         $('.addToCartBtn').on('click', function() {                      
@@ -122,18 +124,11 @@ $(document).ready(() => {
                     </tr>
                 `);
 
-                $('#orderFormsModalBody tbody').append(
-                    `<tr class="table-light d-flex justify-content">						
-                        <td class="py-1 text-start small col-6">${cart[i].title}</td>
-                        <td class="py-1 small col-2">                            
-                            <p class="p-0 m-0 amountCount">${getProductAmount(cart[i])}x</p>                        
-                        </td>
-                        <td class="py-1 small col-4">${cart[i].price.toFixed(2)} kr/st</td>
-                    </tr>
-                `);
                 countedIds.push(Number(cart[i].id));
             }
         }
+
+
     
 		$('.prodId').hide();
         $('.removeItemBtn').on('click', removeProduct);
@@ -152,8 +147,30 @@ $(document).ready(() => {
 
         updateNavCartAmount();
         updateOrderTotal();
+        updateOrderModal();
         setCartPage();
     };
+
+    function updateOrderModal() {
+
+        $('#orderFormsModalBody tbody').html('');
+        let countedIds = [];
+
+        for(let i = 0; i < cart.length; i++) {
+           if(!countedIds.includes(Number(cart[i].id))) { 
+            $('#orderFormsModalBody tbody').append(
+                `<tr class="table-light d-flex justify-content">						                    
+                    <td class="py-1 text-start small col-6">${cart[i].title}</td>
+                    <td class="py-1 small col-2">                            
+                        <p class="p-0 m-0 amountCount">${getProductAmount(cart[i])}x</p>                        
+                    </td>
+                    <td class="py-1 small col-4">${cart[i].price.toFixed(2)} kr/st</td>
+                </tr>
+                `);
+                countedIds.push(cart[i].id);
+            }
+        }
+    }
 
     function increaseProductAmount() {
         const productId = $(this).closest('tr').find('.prodId').text();                
@@ -164,6 +181,7 @@ $(document).ready(() => {
         $(this).closest('tr').find('.amountCount').html(`<p class="p-0 m-0 amountCount">${getProductAmount(cart[productIndex])}</p>`);
         updateNavCartAmount();
         updateOrderTotal();
+        updateOrderModal();
     }
 
     function decreaseProductAmount() {
@@ -181,6 +199,7 @@ $(document).ready(() => {
 
         updateNavCartAmount();
         updateOrderTotal();
+        updateOrderModal();
         setCartPage();
     }    
 
