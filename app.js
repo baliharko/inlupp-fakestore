@@ -229,6 +229,11 @@ $(document).ready(() => {
         $('#emailInputField').removeClass('is-invalid');
         $('#phoneInputField').removeClass('is-invalid');
 
+        $('#invalidNameMessage').hide();
+        $('#invalidPhoneMessage').hide();
+        $('#invalidEmailMessage').hide();
+        $('#invalidAddressMessage').hide();
+
         const name = $('#nameInputField').val();
         const address = $('#addressInputField').val();        
         const phone = $('#phoneInputField').val().match(/^[\d\s\(\)\-+]+$/);
@@ -236,22 +241,26 @@ $(document).ready(() => {
         
         if (!(name && name.trim())) {
             $('#nameInputField').val('');
-            $('#nameInputField').addClass('is-invalid');
+            $('#nameInputField').addClass('is-invalid');            
+            $('#invalidNameMessage').show();
         }
 
         if(!phone) {
             $('#phoneInputField').val('');
             $('#phoneInputField').addClass('is-invalid');
+            $('#invalidPhoneMessage').show();
         }
 
         if(!(address && address.trim())) {
             $('#addressInputField').val('');
             $('#addressInputField').addClass('is-invalid');
+            $('#invalidAddressMessage').show();
         }
 
         if(!email) {
             $('#emailInputField').val('');
             $('#emailInputField').addClass('is-invalid');
+            $('#invalidEmailMessage').show();
         }
 
         if(name && name.trim() && phone && address && address.trim() && email) {
@@ -278,5 +287,9 @@ $(document).ready(() => {
         });         
     }
 
-    $('#thankYouModalBody').hide();    
+    $('#thankYouModalBody').hide();
+    $('#invalidNameMessage').hide();
+    $('#invalidPhoneMessage').hide();
+    $('#invalidEmailMessage').hide();
+    $('#invalidAddressMessage').hide(); 
 });
