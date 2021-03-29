@@ -59,7 +59,7 @@ $(document).ready(() => {
                    <p class="card-text small">${product.description}</p>
                 </div>
                 <div class="d-flex flex-column align-items-center">
-                   <p class="lead fade mt-5 mb-3">${product.price.toFixed(2)} kr</p>
+                   <p class="lead mt-5 mb-3">${product.price.toFixed(2)} kr</p>
                    <button style="width: 10rem;" class="btn btn-outline-secondary addToCartBtn" id="${product.id}">Add to Cart</button>
                 </div>
              </div>
