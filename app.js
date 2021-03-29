@@ -247,10 +247,8 @@ $(document).ready(() => {
 
     $('#aboutModalBtn').click(() => $('#aboutModal').modal('show'));
     $('#exitAboutModal').click(() => $('#aboutModal').modal('hide'));
-
     $('#openOrderFormsBtn').click(() => $('#orderFormsModal').modal('show'));
     $('#placeOrderBtn').click(validateOrderForms);
-
     $('#mobileExitModalBtn').on('click', () => $('#orderFormsModal').modal('hide'));
 
     function validateOrderForms() {
@@ -298,7 +296,6 @@ $(document).ready(() => {
             finishOrder();                        
         }
     };
-
 
     function finishOrder() {
 
